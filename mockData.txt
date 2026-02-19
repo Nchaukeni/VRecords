@@ -1,0 +1,114 @@
+// frontend/src/mocks/members.js
+
+export const members = [
+  {
+    vgroupId: "vg-001", // Virtual Group ID, for potential expansion to multiple groups
+    id: "m-001",
+    fullName: "Alice Moyo",
+    memberNumber: "VR-001",
+    joinDate: "2023-01-15",
+    status: "active", // active | inactive
+  },
+  {
+    vgroupId: "vg-001",
+    id: "m-002",
+    fullName: "Brian Ndlovu",
+    memberNumber: "VR-002",
+    joinDate: "2023-03-10",
+    status: "active",
+  },
+  {
+    vgroupId: "vg-001",
+    id: "m-003",
+    fullName: "Chipo Dube",
+    memberNumber: "VR-003",
+    joinDate: "2024-02-01",
+    status: "inactive",
+  },
+];
+
+
+
+// frontend/src/mocks/contributions.js
+//Contributions such as social fund
+
+export const contributions = [
+  {
+    id: "c-001",
+    memberId: "m-001",
+    amount: 100,
+    date: "2023-02-10",
+    type: "monthly", // monthly | special
+  },
+  {
+    id: "c-002",
+    memberId: "m-002",
+    amount: 100,
+    date: "2023-02-12",
+    type: "monthly",
+  },
+  {
+    id: "c-003",
+    memberId: "m-001",
+    amount: 300,
+    date: "2024-01-05",
+    type: "special",
+  },
+];
+
+
+// frontend/src/mocks/loans.js
+
+export const loans = [
+  {
+    id: "l-001",
+    memberId: "m-002",
+    principal: 2000,
+    interestRate: 0.1, // 10%
+    issuedDate: "2023-06-01",
+    termMonths: 12,
+    status: "active", // active | closed | defaulted
+    expectedTotalPayment: 2200,  // Calculation here must be revisited later to account for compounding interest if needed.
+    monthlyInstallment: 183.33  // Calculated as expectedTotalPayment / termMonths
+  },
+  {
+    id: "l-002",
+    memberId: "m-001",
+    principal: 1500,
+    interestRate: 0.08,
+    issuedDate: "2024-03-01",
+    termMonths: 10,
+    status: "active",
+    expectedTotalPayment: 1620,  // Calculated as principal + (principal * interestRate)
+    monthlyInstallment: 162  // Calculated as expectedTotalPayment / termMonths
+  },
+];
+
+
+// frontend/src/mocks/shares.js
+const fixedValue = 300; /* Cost of a share will be set by the treasurer through 
+                        his/her dashboard. Number of total group shares will be
+                        changing as members buy more shares, but the cost of each 
+                        share will remain fixed. 
+                        */
+
+export const shares = [
+  {
+    id: "s-001",
+    memberId: "m-001",
+    amount: fixedValue,
+    purchaseDate: "2023-02-01",
+  },
+  {
+    id: "s-002",
+    memberId: "m-002",
+    amount: fixedValue,
+    purchaseDate: "2023-04-12",
+  },
+  {
+    id: "s-003",
+    memberId: "m-001",
+    amount: fixedValue,
+    purchaseDate: "2024-01-20",
+  },
+];
