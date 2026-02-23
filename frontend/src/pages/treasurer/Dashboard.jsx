@@ -1,10 +1,11 @@
 import { members, shares, contributions } from "../../mock";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import "bootstrap/dist/css/bootstrap.min.css"; 
 
 const TreasurerDashboard = () => {
     const navigate = useNavigate();
-    const { loans } = useAuth(); // custorm hook to get loans from context
+    const { loans,logout } = useAuth(); // custorm hook to get loans from context
 
   // Totals
   const totalShareCapital = shares.reduce(
@@ -50,14 +51,17 @@ const TreasurerDashboard = () => {
           <h3>Monthly Expected Inflow</h3>
           <p>${totalMonthlyExpected.toFixed(2)}</p>
         </div>
+        <div>
+          <Link to="/treasurer/apply-loan"><h3>Apply for New Loan</h3></Link>
+        </div>
       </section>
 
       <hr style={{ margin: "2rem 0" }} />
 
       <h2>Loan Portfolio</h2>
 
-      <table border="1" cellPadding="8" style={{ width: "100%" }}>
-        <thead>
+      <table border="1" cellPadding="8" style={{ width: "100%" }} className="table table-hover">
+        <thead className="table-light">
           <tr>
             <th>Member</th>
             <th>Principal</th>
@@ -86,6 +90,9 @@ const TreasurerDashboard = () => {
           })}
         </tbody>
       </table>
+         <button onClick={logout} style={{ marginTop: "2rem" }}>
+      Logout
+    </button>
     </div>
   );
 };

@@ -24,8 +24,8 @@ export default function AppRoutes() {
           path="/"
           element={
             user.role === ROLES.CHAIRPERSON
-              ? <Navigate to="/chair/dashboard" replace />
-              : <Navigate to="/treasurer/dashboard" replace />
+              ? <Navigate to="/chair" replace />
+              : <Navigate to="/treasurer" replace />
           }
         />
 

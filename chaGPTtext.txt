@@ -1,4 +1,60 @@
-Passing state through the URL kept giving me errors so i made adjustments to pass mock data through context. Everything works well
+To Do List
+Chairperson
+- Click on pending loans must lead to loan approval panel
+- Chairperson is a member elevated to Chairperson
+- Chairperson must be able to add a member and remove a member
+
+
+still a white blank page. here are my ChairRoutes.jsx and AppRoutes.jsx files
+
+
+
+// src/routes/ChairRoutes.jsx
+
+import { Routes, Route } from "react-router-dom";
+import ChairLayout from "../components/layout/ChairLayout";
+import Dashboard from "../pages/chairperson/Dashboard";
+import LoanApprovalPanel from "../pages/chairperson/LoanApprovalPanel";
+import RepaymentOversightPanel from "../pages/chairperson/RepaymentOversightPanel";
+
+const ChairRoutes = () => {
+  return (
+    <Routes>
+      <Route element={<ChairLayout />}>
+        <Route index element={<Dashboard />} />
+        <Route path="loan-approvals" element={<LoanApprovalPanel />} />
+        <Route path="repayments" element={<RepaymentOversightPanel />} />
+      </Route>
+    </Routes>
+  );
+};
+
+export default ChairRoutes;
+
+/*import { Routes, Route } from "react-router-dom";
+import Dashboard from "../pages/chairperson/Dashboard";
+import MemberProfile from "../pages/chairperson/MemberProfile";
+import LoanApprovalPanel from "../pages/chairperson/LoanApprovalPanel";
+import RepaymentOversightPanel from "../pages/chairperson/RepaymentOversightPanel";
+
+const ChairRoutes = () => {
+  return (
+    <Routes>
+      <Route path="dashboard" element={<Dashboard />} />
+      <Route path="members/:memberId" element={<MemberProfile />} />
+      <Route path="*" element={<Dashboard />} />
+      <Route path="loan-approvals" element={<LoanApprovalPanel />} />
+      <Route path="repayments" element={<RepaymentOversightPanel />} />
+    </Routes>
+  );
+};
+
+export default ChairRoutes;
+
+*/
+
+/////////// AppRoutes.jsx ///////////////////
+// src/routes/AppRoutes.jsx
 
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -49,221 +105,3 @@ export default function AppRoutes() {
 
   );
 }
-
-import { createContext, useContext, useState } from "react";
-import { ROLES } from "../utils/roles";
-import { loans as MockLoans, members, shares, contributions } from "../mock";
-
-const AuthContext = createContext(null); //create the context 
-
-export function AuthProvider({ children }) { //This is the provider component that will wrap the app and provide auth state
-  const [user, setUser] = useState(null);
-  const [loans, setLoans] = useState(
-    MockLoans.map(loan => ({
-      ...loan,
-      amountPaid: 0, // new tracking field for repayments
-    }))
-  );  
-
-  const login = (role) => {
-    setUser({ /// We mock a user object with an id, name, and role based on the selected role
-      id: "mock-user-1",
-      name: role === ROLES.CHAIRPERSON ? "Chairperson" : "Treasurer",
-      role,
-    });
-  };
-
-  const logout = () => setUser(null);
-
-  return (
-    <AuthContext.Provider value={{ user, login, logout , loans, setLoans }}>
-      {children}
-    </AuthContext.Provider>
-  );
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
-}
-
-/*
-    This file defines an AuthCoontext using React's Context API to manage authentication 
-    state across the application. It provides a login function that sets a mock user object
-     based on the selected role (chairperson or treasurer) and a logout function that clears 
-     the user state. The useAuth hook allows components to easily access the authentication 
-     context. 
-
-     login will be replaced with a backend API call in a real application, but for this 
-     mock setup, it simply sets a user object with the appropriate role. The AuthProvider 
-     component wraps the entire app to provide access to the auth state and functions 
-     throughout the component tree.
-*/
-
-import { useParams, useLocation, useNavigate } from "react-router-dom";
-import { members } from "../../mock";
-import { useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-
-const LoanRepayment = () => {
-  const { loanId } = useParams();
-  const navigate = useNavigate();
-
-  const { loans, setLoans } = useAuth();
-
-  const loan = loans.find(l => l.id === loanId);
-
-  const member = members.find(m => m.id === loan.memberId);
-
-  const [payment, setPayment] = useState("");
-
-  const remainingBalance =
-    loan.expectedTotalPayment - loan.amountPaid;
-
-  const handleSubmit = () => {
-    const paymentValue = parseFloat(payment);
-
-    if (!paymentValue || paymentValue <= 0) return;
-
-    setLoans(prevLoans =>
-      prevLoans.map(l =>
-        l.id === loanId
-          ? {
-              ...l,
-              amountPaid: l.amountPaid + paymentValue,
-              status:
-                l.amountPaid + paymentValue >= l.expectedTotalPayment
-                  ? "closed"
-                  : "active",
-            }
-          : l
-      )
-    );
-    console.log(`Processed payment of $${paymentValue} for loan ${loanId}`);
-    navigate("/treasurer/dashboard");
-  };
-
-  return (
-    <div style={{ padding: "2rem" }}>
-      <button onClick={() => navigate(-1)}>← Back</button>
-
-      <h1>Loan Repayment</h1>
-
-      <h3>{member?.fullName}</h3>
-
-      <p>Principal: ${loan.principal}</p>
-      <p>Total Expected: ${loan.expectedTotalPayment}</p>
-      <p>Amount Paid: ${loan.amountPaid}</p>
-      <p>Remaining Balance: ${remainingBalance}</p>
-
-      <hr style={{ margin: "2rem 0" }} />
-
-      <input
-        type="number"
-        placeholder="Enter repayment amount"
-        value={payment}
-        onChange={e => setPayment(e.target.value)}
-      />
-
-      <button onClick={handleSubmit} style={{ marginLeft: "1rem" }}>
-        Submit Payment
-      </button>
-    </div>
-  );
-};
-
-export default LoanRepayment;
-
-import { members, shares, contributions } from "../../mock";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-
-const TreasurerDashboard = () => {
-    const navigate = useNavigate();
-    const { loans } = useAuth();
-
-  // Totals
-  const totalShareCapital = shares.reduce(
-    (sum, share) => sum + share.amount,
-    0
-  );
-
-  const totalContributions = contributions.reduce(
-    (sum, c) => sum + c.amount,
-    0
-  );
-
-  const totalLoanExposure = loans.reduce(
-    (sum, loan) => sum + loan.expectedTotalPayment,
-    0
-  );
-
-  const totalMonthlyExpected = loans.reduce(
-    (sum, loan) => sum + loan.monthlyInstallment,
-    0
-  );
-
-  return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Treasurer Dashboard</h1>
-
-      <section style={{ display: "flex", gap: "2rem", marginTop: "2rem" }}>
-        <div>
-          <h3>Total Share Capital</h3>
-          <p>${totalShareCapital}</p>
-        </div>
-
-        <div>
-          <h3>Total Contributions</h3>
-          <p>${totalContributions}</p>
-        </div>
-
-        <div>
-          <h3>Total Loan Exposure</h3>
-          <p>${totalLoanExposure}</p>
-        </div>
-
-        <div>
-          <h3>Monthly Expected Inflow</h3>
-          <p>${totalMonthlyExpected.toFixed(2)}</p>
-        </div>
-      </section>
-
-      <hr style={{ margin: "2rem 0" }} />
-
-      <h2>Loan Portfolio</h2>
-
-      <table border="1" cellPadding="8" style={{ width: "100%" }}>
-        <thead>
-          <tr>
-            <th>Member</th>
-            <th>Principal</th>
-            <th>Interest</th>
-            <th>Total Payable</th>
-            <th>Amount Paid</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loans.map(loan => {
-            const member = members.find(m => m.id === loan.memberId);
-
-            return (
-              <tr   key={loan.id}
-                    onClick={() => navigate(`/treasurer/loans/${loan.id}`)}
-                    style={{ cursor: "pointer" }}>
-                <td>{member?.fullName}</td>
-                <td>${loan.principal}</td>
-                <td>{loan.interestRate * 100}%</td>
-                <td>${loan.expectedTotalPayment}</td>
-                <td>${loan.amountPaid}</td>
-                <td>{loan.status}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
-  );
-};
-
-export default TreasurerDashboard;

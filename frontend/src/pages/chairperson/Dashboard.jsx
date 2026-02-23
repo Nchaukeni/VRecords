@@ -1,7 +1,12 @@
 import { useAuth } from "../../context/AuthContext";
+import "bootstrap/dist/css/bootstrap.min.css"; 
 import { members, loans, shares, contributions } from "../../mock";
 import { useNavigate } from "react-router-dom";
 
+import { calculateTotalOutstandingExposure, countClosedLoans, countPendingApplications, 
+  countFlaggedRepayments,
+  calculateTotalValidRepaymentsAll,
+} from "../../utils/finance";
 
 //////////////// These will be removed into utils later /////////////////////
 const totalMembers = members.length;
@@ -14,7 +19,14 @@ const membersWithShares = new Set(shares.map(s => s.memberId)).size;
 
 
 export default function Dashboard() {
-  const { logout } = useAuth();
+  const { logout, loans, loanApplications, loanRepayments } = useAuth();
+
+  const totalOutstanding = calculateTotalOutstandingExposure( loans, loanRepayments );
+
+  const closedLoans = countClosedLoans(loans);
+  const pendingApplications = countPendingApplications(loanApplications);
+  const flaggedRepayments = countFlaggedRepayments(loanRepayments);
+  const totalCollected = calculateTotalValidRepaymentsAll(loanRepayments);
   const navigate = useNavigate();
 
   return (  
@@ -22,6 +34,19 @@ export default function Dashboard() {
     <h1>Chairperson Dashboard</h1>
 
     <section style={{ display: "flex", gap: "2rem", marginTop: "1.5rem" }}>
+       <div style={{ marginBottom: "30px" }}>
+            <h2>Governance Overview</h2>
+
+            <div style={{ display: "grid", gap: "10px", maxWidth: "400px" }}>
+                  <div><strong>Total Outstanding Exposure:</strong> {totalOutstanding}</div>
+                  <div><strong>Total Collected (Valid):</strong> {totalCollected}</div>
+                  <div><strong>Closed Loans:</strong> {closedLoans}</div>
+                  <div><strong>Pending Applications:</strong> {pendingApplications}</div>
+                  <div style={{ color: flaggedRepayments > 0 ? "red" : "black" }}>
+                    <strong>Flagged Repayments:</strong> {flaggedRepayments}
+                  </div>
+            </div>
+        </div>
       <div>
         <h3>Total Members</h3>
         <p>{totalMembers}</p>
@@ -49,8 +74,8 @@ export default function Dashboard() {
     </section>
     
     <h2 style={{ marginTop: "3rem" }}>Members Overview</h2>
-    <table border="1" cellPadding="8" style={{ marginTop: "1rem", width: "100%" }}>
-      <thead>
+    <table border="1" cellPadding="8" style={{ marginTop: "1rem", width: "100%" }} className="table table-hover">
+      <thead className="table-light">
         <tr>
           <th>Member #</th>
           <th>Name</th>
