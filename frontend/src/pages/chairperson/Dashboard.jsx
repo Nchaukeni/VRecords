@@ -1,6 +1,6 @@
 import { useAuth } from "../../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css"; 
-import { members, loans, shares, contributions } from "../../mock";
+import { members, loans, contributions } from "../../mock";
 import { useNavigate } from "react-router-dom";
 
 import { calculateTotalOutstandingExposure, countClosedLoans, countPendingApplications, 
@@ -14,12 +14,13 @@ const activeMembers = members.filter(m => m.status === "active").length;
 const inactiveMembers = totalMembers - activeMembers;
 
 const membersWithLoans = new Set(loans.map(l => l.memberId)).size;
-const membersWithShares = new Set(shares.map(s => s.memberId)).size;
+
 ///////////////////////////////////////////////////////////////////////////
 
 
 export default function Dashboard() {
-  const { logout, loans, loanApplications, loanRepayments } = useAuth();
+  const { logout, loans, loanApplications, loanRepayments, shares } = useAuth();
+  const membersWithShares = new Set(shares.map(s => s.memberId)).size;
 
   const totalOutstanding = calculateTotalOutstandingExposure( loans, loanRepayments );
 

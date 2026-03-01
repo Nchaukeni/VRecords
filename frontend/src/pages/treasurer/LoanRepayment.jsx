@@ -17,7 +17,7 @@ const LoanRepayment = () => {
 
   const loan = loans.find((l) => l.id === loanId);
 
-  // 🛑 Safety guard
+  // Safety guard
   if (!loan) {
     return <div>Loan not found.</div>;
   }
@@ -71,8 +71,18 @@ const LoanRepayment = () => {
           : l
       )
     );
+  } else if (updatedRemaining > 0) {
+    // Update amountPaid for active loans
+    console.log(`Processed payment of $${paymentValue} for loan ${loan.id}`);
+    setLoans((prev) =>
+      prev.map((l) =>
+        l.id === loan.id
+          ? { ...l, amountPaid: l.amountPaid + paymentValue }
+          : l
+      )
+    );
   }
-
+  console.log('new loan tatal paid;', loan.amountPaid);
   setPaymentAmount("");
   navigate("/treasurer");
 };

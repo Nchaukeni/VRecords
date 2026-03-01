@@ -22,8 +22,14 @@ const LoanApprovalPanel = () => {
         memberId: application.memberId,
         principal: application.requestedAmount,
         interestRate: application.interestRate,
+        expectedTotalPayment: application.requestedAmount + (application.requestedAmount * application.interestRate),
+        monthlyInstallment: 0,
+        amountPaid: 0,
+        issuedDate: new Date().toISOString(),
+        termMonths: 0,
         status: "approved",
       },
+      
     ]);
 
     // 2️⃣ Update application status

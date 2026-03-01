@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { members } from "../mock";
+import { members, shares } from "../mock";
 
 const AuthContext = createContext();
 
@@ -9,14 +9,23 @@ export const AuthProvider = ({ children }) => {
   // -------------------------
   // Loans (Only approved loans live here)
   // -------------------------
+  const addLoan = (loans, newLoan) => { /// This adds any approved loan
+    loans.push(newLoan);
+  }
+  ////////// This is valid loan format //////////////////
+
   const [loans, setLoans] = useState([
     {
       id: "l-001",
       memberId: "m-001",
       principal: 5000,
       interestRate: 0.1,
+      expectedTotalPayment: 5500,
+      monthlyInstallment: 458.33,
+      amountPaid: 500,
+      issuedDate: new Date().toISOString(),
+      termMonths: 12,
       status: "approved", // pending | approved | rejected | closed
-      expectedTotalPayment: 5500
     },
   ]);
 
@@ -34,8 +43,9 @@ export const AuthProvider = ({ children }) => {
       loanId: "l-001",
       memberId: "m-001",
       amount: 500,
-      enteredBy: "treasurer",
-      status: "valid", // valid | flagged
+      status: "valid", 
+      flagged: false,
+      enteredBy: "treasurer",// valid | flagged
       date: new Date().toISOString(),
     },
   ]);
@@ -56,10 +66,12 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         members,
+        shares,
         login,
         logout,
         loans,
         setLoans,
+        addLoan,
         loanApplications,
         setLoanApplications,
         loanRepayments,

@@ -1,10 +1,32 @@
 import { useAuth } from "../../context/AuthContext";
+import { updateLoanPaidAmount } from "../../utils/finance";
 import "bootstrap/dist/css/bootstrap.min.css"; 
 
 const RepaymentOversightPanel = () => {
-  const { loanRepayments, setLoanRepayments } = useAuth();
+  const { loanRepayments, setLoanRepayments, setLoans, loans } = useAuth();
 
   const handleFlagToggle = (repaymentId) => {
+    // First, we find the current repayment to know its current status
+    const currentRepayment = loanRepayments.find(r => r.id === repaymentId);
+    const newStatus = currentRepayment.status === "valid" ? "flagged" : "valid";
+  
+    // Update the repayments state
+    setLoanRepayments((prev) =>
+      prev.map((r) =>
+        r.id === repaymentId
+          ? { ...r, status: newStatus }
+          : r
+    )
+    );
+  
+    // new repayment status is used to update loan paid amount
+    if (newStatus === "valid") {
+      const loan = loans.find(l => l.id === currentRepayment.loanId);
+      updateLoanPaidAmount(loan.id, currentRepayment, setLoans);
+    }
+  };
+
+ /* const handleFlagToggle = (repaymentId) => {
     setLoanRepayments((prev) =>
       prev.map((r) =>
         r.id === repaymentId
@@ -15,7 +37,19 @@ const RepaymentOversightPanel = () => {
           : r
       )
     );
+//////////////////////////////////////////////////////////////////
+    //     following block is there to update the loan's         
+    //     amountPaid when chairperson toggles a repayment to valid.
+///////////////////////////////////////////////////////////////
+    const toggledRepayment = loanRepayments.find(r => r.id === repaymentId);
+    console.log(toggledRepayment.status);
+    if (toggledRepayment.status === "valid") {
+      const loan = loans.find(l => l.id === toggledRepayment.loanId);
+      updateLoanPaidAmount(loan.id, toggledRepayment, setLoans);
+    }
+
   };
+ */
 
   if (loanRepayments.length === 0) {
     return (
@@ -48,7 +82,7 @@ const RepaymentOversightPanel = () => {
             <tr key={repayment.id}>
               <td>{repayment.loanId}</td>
               <td>{repayment.memberId}</td>
-              <td>{repayment.amount}</td>
+              <td>K{repayment.amount}</td>
               <td>{repayment.enteredBy}</td>
               <td>
                 {new Date(repayment.date).toLocaleDateString()}
@@ -56,7 +90,7 @@ const RepaymentOversightPanel = () => {
               <td
                 style={{
                   color:
-                    repayment.status === "flagged"
+                    repayment.status === "pending"
                       ? "red"
                       : "green",
                   fontWeight: "bold",

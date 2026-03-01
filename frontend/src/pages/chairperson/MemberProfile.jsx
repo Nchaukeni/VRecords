@@ -1,7 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { members, loans, shares, contributions } from "../../mock";
+import { useAuth } from "../../context/AuthContext";
+import { contributions } from "../../mock";
 
 const MemberProfile = () => {
+  const { loans, members, shares } = useAuth();
   const { memberId } = useParams();
   const navigate = useNavigate();
 
@@ -51,13 +53,34 @@ const MemberProfile = () => {
       {memberLoans.length === 0 ? (
         <p>No loans.</p>
       ) : (
-        <ul>
-          {memberLoans.map(loan => (
-            <li key={loan.id}>
-              ${loan.principal} at {loan.interestRate * 100}% — {loan.status}
-            </li>
-          ))}
-        </ul>
+        <><table className="table table-hover">
+          <thead className="table-light">
+            <tr>
+              <th>Loan Id</th>
+              <th>Principal</th>
+              <th>Monthly Interest Rate</th>
+              <th>Loan Tenure</th>
+              <th>Total Payable</th>
+              <th>Issued Date</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {memberLoans.map(loan => (
+              <tr key={loan.id} onClick={() => navigate(`/chair/loans/${loan.id}`)} style={{ cursor: "pointer" }}>
+                <td>{loan.id}</td>
+                <td>K{loan.principal}</td>
+                <td>{loan.interestRate*100}%</td>
+                <td>To be updated</td>
+                <td>K{loan.expectedTotalPayment}</td>
+                <td>{new Date(loan.issuedDate).toLocaleDateString()}</td>
+                <td>{loan.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        </>
+        
       )}
 
       <h2 style={{ marginTop: "2rem" }}>Shares</h2>

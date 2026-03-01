@@ -5,6 +5,7 @@ import TreasurerLayout from "../components/layout/TreasurerLayout";
 import Dashboard from "../pages/treasurer/Dashboard";
 import LoanApplicationForm from "../pages/treasurer/LoanApplicationForm";
 import LoanPortfolio from "../pages/treasurer/LoanPortfolio";
+import LoanProfile from "../pages/chairperson/LoanProfile";
 import LoanRepaymentForm from "../pages/treasurer/LoanRepayment";
 
 const TreasurerRoutes = () => {
@@ -14,7 +15,7 @@ const TreasurerRoutes = () => {
         <Route index element={<Dashboard />} />
         <Route path="apply-loan" element={<LoanApplicationForm />} />
         <Route path="loan-portfolio" element={<LoanPortfolio />} />
-        {/*<Route path="loans/:loanId" element={<LoanRepaymentForm />} /> */}
+        {<Route path="loans/:loanId" element={<LoanProfile/>} />}
       </Route>
     </Routes>
   );

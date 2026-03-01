@@ -9,6 +9,7 @@ const LoanPortfolio = () => {
   const [selectedMember, setSelectedMember] = useState(null);
   const [amount, setAmount] = useState("");
   const [ loanBalance, setBalance ] = useState(null);
+  const [ userLoan, setUserLoan ] = useState(null);
 
   // Get member loan
   /////////////////////////////////////////////////////
@@ -28,10 +29,11 @@ const LoanPortfolio = () => {
 
   ////////////////////////////////////////////////
 
-  const handleRowClick = (member, balance) => {
+  const handleRowClick = (member, balance, loan) => {
     if (balance > 0) {
-      setSelectedMember(member);
-      setBalance(balance);
+      setSelectedMember(member); //setting seleceted member 
+      setBalance(balance);       //Setting balance
+      setUserLoan(loan);   //selecting userLoan so that its used in handleSubmitRepayment
     }
   };
 
@@ -40,14 +42,15 @@ const LoanPortfolio = () => {
 
     const newRepayment = {
       id: Date.now(),
+      loanId: userLoan.id,
       memberId: selectedMember.id,
       amount: Number(amount),
       status: "pending", // IMPORTANT: chair must approve
       flagged: false,
       date: new Date().toISOString(),
-      recordedBy: "treasurer",
+      enteredBy: "treasurer",
     };
-
+   
     setLoanRepayments([...loanRepayments, newRepayment]);
 
     setAmount("");
@@ -63,6 +66,7 @@ const LoanPortfolio = () => {
           <tr>
             <th>Name</th>
             <th>Loan Total</th>
+            <th>Amount Paid</th>
             <th>Loan Balance</th>
           </tr>
         </thead>
@@ -75,12 +79,13 @@ const LoanPortfolio = () => {
             return (
               <tr
                 key={loan.id}
-                onClick={() => handleRowClick(member, balance)}
+                onClick={() => handleRowClick(member, balance, loan)}
                 style={{ cursor: balance > 0 ? "pointer" : "default" }}
               >
                 <td>{member.fullName}</td>
-                <td>{ loan.expectedTotalPayment }</td>
-                <td>{balance}</td>
+                <td>K{ loan.expectedTotalPayment }</td>
+                <td>K{loan.amountPaid}</td>
+                <td>K{balance}</td>
               </tr>
             );
           })}

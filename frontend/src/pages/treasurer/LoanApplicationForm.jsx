@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { calculateAvailableCash } from "../../utils/finance";
 
 const LoanApplicationForm = () => {
   const navigate = useNavigate();
-  const { setLoanApplications, user, members, loans } = useAuth();
+  const { setLoanApplications, user, members, loans, shares, loanRepayments } = useAuth();
 
   const [memberId, setMemberId] = useState("");
   const [requestedAmount, setRequestedAmount] = useState("");
@@ -15,7 +16,12 @@ const LoanApplicationForm = () => {
 
     const amount = Number(requestedAmount);
     const rate = Number(interestRate);
+    const availableCash = calculateAvailableCash(loanRepayments, loans, shares);
 
+    if (amount > availableCash) {
+      alert(`Requested amount exceeds available cash (K${availableCash}).`);
+      return;
+    }
     if (!memberId || !amount || !rate) {
       alert("All fields are required.");
       return;
