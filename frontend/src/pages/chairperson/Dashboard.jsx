@@ -1,6 +1,6 @@
 import { useAuth } from "../../context/AuthContext";
 import "bootstrap/dist/css/bootstrap.min.css"; 
-import { members, loans, contributions } from "../../mock";
+import { contributions } from "../../mock";
 import { useNavigate } from "react-router-dom";
 
 import { calculateTotalOutstandingExposure, countClosedLoans, countPendingApplications, 
@@ -8,21 +8,23 @@ import { calculateTotalOutstandingExposure, countClosedLoans, countPendingApplic
   calculateTotalValidRepaymentsAll,
 } from "../../utils/finance";
 
-//////////////// These will be removed into utils later /////////////////////
-const totalMembers = members.length;
-const activeMembers = members.filter(m => m.status === "active").length;
-const inactiveMembers = totalMembers - activeMembers;
 
-const membersWithLoans = new Set(loans.map(l => l.memberId)).size;
-
-///////////////////////////////////////////////////////////////////////////
 
 
 export default function Dashboard() {
-  const { logout, loans, loanApplications, loanRepayments, shares } = useAuth();
+  const { logout, loans, loanApplications, loanRepayments, shares, penalties, members } = useAuth();
   const membersWithShares = new Set(shares.map(s => s.memberId)).size;
 
-  const totalOutstanding = calculateTotalOutstandingExposure( loans, loanRepayments );
+  //////////////// These will be removed into utils later /////////////////////
+  const totalMembers = members.length;
+  const activeMembers = members.filter(m => m.status === "active").length;
+  const inactiveMembers = totalMembers - activeMembers;
+
+  const membersWithLoans = new Set(loans.map(l => l.memberId)).size;
+
+  ///////////////////////////////////////////////////////////////////////////
+
+  const totalOutstanding = calculateTotalOutstandingExposure( loans, loanRepayments, penalties);
 
   const closedLoans = countClosedLoans(loans);
   const pendingApplications = countPendingApplications(loanApplications);
@@ -31,82 +33,102 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   return (  
-  <div style={{ padding: "2rem" }}>
-    <h1>Chairperson Dashboard</h1>
+    <div className="dashboard-container">
+      <h1 className="dashboard-title">Chairperson Dashboard</h1>
+       <div className="row g-3">
 
-    <section style={{ display: "flex", gap: "2rem", marginTop: "1.5rem" }}>
-       <div style={{ marginBottom: "30px" }}>
-            <h2>Governance Overview</h2>
-
-            <div style={{ display: "grid", gap: "10px", maxWidth: "400px" }}>
-                  <div><strong>Total Outstanding Exposure:</strong> {totalOutstanding}</div>
-                  <div><strong>Total Collected (Valid):</strong> {totalCollected}</div>
-                  <div><strong>Closed Loans:</strong> {closedLoans}</div>
-                  <div><strong>Pending Applications:</strong> {pendingApplications}</div>
-                  <div style={{ color: flaggedRepayments > 0 ? "red" : "black" }}>
-                    <strong>Flagged Repayments:</strong> {flaggedRepayments}
-                  </div>
+          <div className="col-md-4 col-lg-2">
+              <div className="stats-card">
+                <i className="bi bi-bank stats-icon"></i>
+                <div className="stats-title">Governance Overview</div>
+                <div style={{ display: "grid", gap: "10px", maxWidth: "400px" }}>
+                  <div className="stats-description">Total Outstanding Exposure:<strong> K{totalOutstanding}</strong></div>
+                  <div className="stats-description">Total Collected (Valid): <strong>K{totalCollected}</strong> </div>
+                  <div className="stats-description">Closed Loans: <strong>{closedLoans}</strong></div>
+                  <div className="stats-description">Pending Applications: <strong>{pendingApplications}</strong></div>
+                  <div style={{ color: flaggedRepayments > 0 ? "red" : "black" }} className="stats-description"> Flagged Repayments: <strong>{flaggedRepayments}</strong></div>
             </div>
-        </div>
-      <div>
-        <h3>Total Members</h3>
-        <p>{totalMembers}</p>
-      </div>
+              </div>
+            </div>
 
-      <div>
-        <h3>Active Members</h3>
-        <p>{activeMembers}</p>
-      </div>
+            <div className="col-md-4 col-lg-2">
+              <div className="stats-card">
+                <i className="bi bi-people-fill stats-icon"></i>
+                <div className="stats-title">Total Members</div>
+                <div className="stats-value">{totalMembers}</div>
+              </div>
+            </div>
 
-      <div>
-        <h3>Inactive Members</h3>
-        <p>{inactiveMembers}</p>
-      </div>
+            <div className="col-md-4 col-lg-2">
+              <div className="stats-card">
+                <i className="bi bi-person-check stats-icon"></i>
+                <div className="stats-title">Active Members</div>
+                <div className="stats-value">{activeMembers}</div>
+              </div>
+            </div>
 
-      <div>
-        <h3>Members with Loans</h3>
-        <p>{membersWithLoans}</p>
-      </div>
+            <div className="col-md-4 col-lg-2">
+              <div className="stats-card">
+                <i className="bi bi-person-exclamation stats-icon"></i>
+                <div className="stats-title">Inactive Members</div>
+                <div className="stats-value">{inactiveMembers}</div>
+              </div>
+            </div>
 
-      <div>
-        <h3>Members with Shares</h3>
-        <p>{membersWithShares}</p>
-      </div>
-    </section>
-    
-    <h2 style={{ marginTop: "3rem" }}>Members Overview</h2>
-    <table border="1" cellPadding="8" style={{ marginTop: "1rem", width: "100%" }} className="table table-hover">
-      <thead className="table-light">
-        <tr>
-          <th>Member #</th>
-          <th>Name</th>
-          <th>Status</th>
-          <th>Shares</th>
-          <th>Loans</th>
-        </tr>
-      </thead>
-      <tbody>
-        {members.map(member => {
-          const memberShares = shares.filter(s => s.memberId === member.id).length;
-          const memberLoans = loans.filter(l => l.memberId === member.id).length;
+            <div className="col-md-4 col-lg-2">
+              <div className="stats-card">
+                <i className="bi bi-person-lines-fill stats-icon"></i>
+                <div className="stats-title">Members With Loans</div>
+                <div className="stats-value">{membersWithLoans}</div>
+              </div>
+            </div>
 
-          return (
-            <tr key={member.id} onClick={() => navigate(`/chair/members/${member.id}`)} style={{ cursor: "pointer" }}>
-              <td>{member.memberNumber}</td>
-              <td>{member.fullName}</td>
-              <td>{member.status}</td>
-              <td>{memberShares}</td>
-              <td>{memberLoans}</td>
+            <div className="col-md-4 col-lg-2">
+              <div className="stats-card">
+                <i className="bi bi-person-fill-lock stats-icon"></i>
+                <div className="stats-title">Members with Share</div>
+                <div className="stats-value">{membersWithShares}</div>
+              </div>
+            </div>
+       </div>
+
+    <h3 className="section-title">Members Overview</h3>
+    <div className="card shadow-sm">
+      <div className="card-body">
+        <table className="table table-hover">
+          <thead className="table-light">
+            <tr>
+              <th>Member #</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Shares</th>
+              <th>Loans</th>
             </tr>
-          );
-        })}
-      </tbody>
-    </table>
+          </thead>
+          <tbody>
+            {members.map(member => {
+              const memberShares = shares.filter(s => s.memberId === member.id).length;
+              const memberLoans = loans.filter(l => l.memberId === member.id).length;
 
+            return (
+              <tr key={member.id} onClick={() => navigate(`/chair/members/${member.vgroupId}/${member.memberNumber}`)} style={{ cursor: "pointer" }}>
+                <td>{member.memberNumber}</td>
+                <td>{member.fullName}</td>
+                <td>{member.status}</td>
+                <td>{memberShares}</td>
+                <td>{memberLoans}</td>
+              </tr>
+            );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-    <button onClick={logout} style={{ marginTop: "2rem" }}>
+    <button onClick={logout} className="btn btn-danger" style={{ marginTop: "2rem" }}>
       Logout
     </button>
-  </div>);
+    </div>
+    );
 
 }

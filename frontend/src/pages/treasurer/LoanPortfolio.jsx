@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import "../../styles/LoanPortfolio.css"
 
 const LoanPortfolio = () => {
-  const { members, loans, setLoanRepayments, loanRepayments } = useAuth();
+  const { members, loans, setLoanRepayments, loanRepayments, penalties } = useAuth();
 
   const [selectedMember, setSelectedMember] = useState(null);
   const [amount, setAmount] = useState("");
@@ -13,16 +13,11 @@ const LoanPortfolio = () => {
 
   // Get member loan
   /////////////////////////////////////////////////////
-    const getLoanBalance = (loan) => {
-  if (loan.status !== "approved") return 0;
+  const getLoanBalance = (loan) => {
+    if (loan.status !== "approved") return 0;
 
-  const approvedRepayments = loanRepayments
-    .filter(
-      (r) =>
-        r.memberId === loan.memberId &&
-        r.status === "valid"
-    )
-    .reduce((sum, r) => sum + r.amount, 0);
+    const approvedRepayments = loanRepayments.filter((r) => r.memberId === loan.memberId && r.status === "valid"
+    ).reduce((sum, r) => sum + r.amount, 0);
 
   return loan.expectedTotalPayment - approvedRepayments;
 };
@@ -58,39 +53,51 @@ const LoanPortfolio = () => {
   };
 
   return (
-    <div>
-      <h2>Loan Portfolio</h2>
-
-      <table className="table table-hover">
-        <thead className="table-light">
-          <tr>
-            <th>Name</th>
-            <th>Loan Total</th>
-            <th>Amount Paid</th>
-            <th>Loan Balance</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {loans.map((loan) => {
-            const member = members.find(m => m.id === loan.memberId);
-            const balance = getLoanBalance(loan);
-            if ( !member || loan.status !== 'approved') return null;
-            return (
-              <tr
-                key={loan.id}
-                onClick={() => handleRowClick(member, balance, loan)}
-                style={{ cursor: balance > 0 ? "pointer" : "default" }}
-              >
-                <td>{member.fullName}</td>
-                <td>K{ loan.expectedTotalPayment }</td>
-                <td>K{loan.amountPaid}</td>
-                <td>K{balance}</td>
+    <div className="dashboard-container">
+      <h3 className="section-title">Loan Portfolio</h3>
+      <div className="card shadow-sm">
+        <div className="card-body">
+          <table className="table table-hover">
+            <thead className="table-light">
+              <tr>
+                <th>Name</th>
+                <th>Loan Principal</th>
+                <th>Interest %</th>
+                <th>Loan Interest</th>
+                <th>Loan Tenure</th>
+                <th>Penalties Acrued</th>
+                <th>Amount Paid</th>
+                <th>Loan Balance</th>
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            </thead>
+            <tbody>
+                {loans.map((loan) => {
+                  const member = members.find(m => m.id === loan.memberId);
+                  const penaltyAmount = penalties.filter(p => p.loanId === loan.id).reduce((sum, p) => sum + p.amount, 0);
+                  const balance = getLoanBalance(loan) + penaltyAmount;
+                    if ( !member || loan.status !== 'approved') return null;
+                        return (
+                    <tr
+                      key={loan.id}
+                      onClick={() => handleRowClick(member, balance, loan)}
+                      style={{ cursor: balance > 0 ? "pointer" : "default" }}
+                    >
+                      <td>{member.fullName}</td>
+                      <td>K{ loan.principal }</td>
+                      <td>{loan.interestRate * 100}%</td>
+                      <td>K{Math.round(Math.pow(1+loan.interestRate, loan.termMonths) * loan.principal - loan.principal)}</td>
+                      <td>{loan.termMonths} months</td>
+                      <td>K{penaltyAmount}</td>
+                      <td>K{loan.amountPaid}</td>
+                      <td>K{balance}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+        </table>
+      </div>
+    </div>
+      
 
       {/* Modal */}
       {selectedMember && (
@@ -105,6 +112,7 @@ const LoanPortfolio = () => {
             </p>
 
             <input
+              className="form-control"
               type="number"
               placeholder="Enter amount"
               value={amount}
@@ -112,10 +120,10 @@ const LoanPortfolio = () => {
             />
 
             <div className="modal-actions">
-              <button onClick={handleSubmitRepayment}>
+              <button onClick={handleSubmitRepayment} className="btn btn-success">
                 Submit
               </button>
-              <button onClick={() => setSelectedMember(null)}>
+              <button onClick={() => setSelectedMember(null)} className="btn btn-danger">
                 Cancel
               </button>
             </div>

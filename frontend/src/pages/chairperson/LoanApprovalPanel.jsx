@@ -14,7 +14,11 @@ const LoanApprovalPanel = () => {
   );
 
   const handleApprove = (application) => {
-    // 1️⃣ Create actual loan
+
+    const compoundedTotal = application.requestedAmount * Math.pow(1 + application.interestRate, application.termMonths);
+    const expectedTotalPayment = Math.round(compoundedTotal);
+
+    // 1️⃣ Create new loan based on the approved application
     setLoans((prev) => [
       ...prev,
       {
@@ -22,11 +26,11 @@ const LoanApprovalPanel = () => {
         memberId: application.memberId,
         principal: application.requestedAmount,
         interestRate: application.interestRate,
-        expectedTotalPayment: application.requestedAmount + (application.requestedAmount * application.interestRate),
-        monthlyInstallment: 0,
+        expectedTotalPayment,
+        monthlyInstallment: Math.round(expectedTotalPayment / application.termMonths),
         amountPaid: 0,
         issuedDate: new Date().toISOString(),
-        termMonths: 0,
+        termMonths: application.termMonths,
         status: "approved",
       },
       
@@ -40,7 +44,12 @@ const LoanApprovalPanel = () => {
           : app
       )
     );
+    ////////////////////////////////////////////////////
+    //    Need to add function that updates available cash 
+    //    here after loan approval
+    ////////////////////////////////////////////////////////
   };
+ 
 
   const handleReject = (applicationId) => {
     setLoanApplications((prev) =>

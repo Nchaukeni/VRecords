@@ -4,10 +4,10 @@ import { contributions } from "../../mock";
 
 const MemberProfile = () => {
   const { loans, members, shares } = useAuth();
-  const { memberId } = useParams();
+  const { vgroupId, memberNumber } = useParams();
   const navigate = useNavigate();
-
-  const member = members.find(m => m.id === memberId);
+  const member = members.find(m => m.vgroupId === vgroupId && m.memberNumber === memberNumber);
+  const memberId = member?.id;
 
   if (!member) {
     return <div>Member not found.</div>;
@@ -71,7 +71,7 @@ const MemberProfile = () => {
                 <td>{loan.id}</td>
                 <td>K{loan.principal}</td>
                 <td>{loan.interestRate*100}%</td>
-                <td>To be updated</td>
+                <td>{loan.termMonths} months</td>
                 <td>K{loan.expectedTotalPayment}</td>
                 <td>{new Date(loan.issuedDate).toLocaleDateString()}</td>
                 <td>{loan.status}</td>

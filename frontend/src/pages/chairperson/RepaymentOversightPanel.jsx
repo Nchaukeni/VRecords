@@ -26,29 +26,16 @@ const RepaymentOversightPanel = () => {
     }
   };
 
- /* const handleFlagToggle = (repaymentId) => {
-    setLoanRepayments((prev) =>
-      prev.map((r) =>
-        r.id === repaymentId
-          ? {
-              ...r,
-              status: r.status === "valid" ? "flagged" : "valid",
-            }
-          : r
-      )
-    );
+ /* 
+     To Do List
+     1 . Available cash update after loan approval - must be corrected (it is currently
+         adding money to available cash instead of deducting after loan approval)
 //////////////////////////////////////////////////////////////////
     //     following block is there to update the loan's         
     //     amountPaid when chairperson toggles a repayment to valid.
-///////////////////////////////////////////////////////////////
-    const toggledRepayment = loanRepayments.find(r => r.id === repaymentId);
-    console.log(toggledRepayment.status);
-    if (toggledRepayment.status === "valid") {
-      const loan = loans.find(l => l.id === toggledRepayment.loanId);
-      updateLoanPaidAmount(loan.id, toggledRepayment, setLoans);
-    }
+//////////////////////////////////////////////////////////////////
 
-  };
+      
  */
 
   if (loanRepayments.length === 0) {

@@ -7,6 +7,8 @@ import LoanApprovalPanel from "../pages/chairperson/LoanApprovalPanel";
 import RepaymentOversightPanel from "../pages/chairperson/RepaymentOversightPanel";
 import MemberProfile from "../pages/chairperson/MemberProfile";
 import LoanProfile from "../pages/chairperson/LoanProfile";
+import AddMember from "../pages/chairperson/AddMember";
+import MemberManagement from "../pages/chairperson/MemberManagement";
 
 const ChairRoutes = () => {
   return (
@@ -15,8 +17,10 @@ const ChairRoutes = () => {
         <Route index element={<Dashboard />} />
         <Route path="loan-approvals" element={<LoanApprovalPanel />} />
         <Route path="repayments" element={<RepaymentOversightPanel />} />
-        <Route path="members/:memberId" element={<MemberProfile />} />
+        <Route path="members/:vgroupId/:memberNumber" element={<MemberProfile />} />
         <Route path="loans/:loanId" element={<LoanProfile />} />
+        <Route path="add-member" element={<AddMember />} />
+        <Route path="memberManagement" element={<MemberManagement />} />
       </Route>
     </Routes>
   );

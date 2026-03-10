@@ -22,6 +22,22 @@ const ChairLayout = () => {
           >
             Dashboard
           </NavLink>
+          <NavLink
+            to="/chair/memberManagement"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Governance Control Center
+          </NavLink>
+           <NavLink
+            to="/chair/add-member"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Add Member
+          </NavLink>
 
           <NavLink
             to="/chair/loan-approvals"
@@ -40,12 +56,13 @@ const ChairLayout = () => {
           >
             Repayment Oversight
           </NavLink>
+          
         </nav>
       </aside>
       <div className="chair-main">
         <header className="chair-header">
           <div>
-            Logged in as: <strong>{user.name}</strong> (Chairperson)
+            Logged in as: <strong>{user.fullName}</strong> {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
           </div>
           <button onClick={logout} className="logout-btn">
             Logout

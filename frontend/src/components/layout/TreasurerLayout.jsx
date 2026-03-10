@@ -43,7 +43,7 @@ const TreasurerLayout = () => {
       <div className="treasurer-main">
         <header className="treasurer-header">
           <div>
-            Logged in as: <strong>{user.name}</strong> (Chairperson)
+            Logged in as: <strong>{user.fullName}</strong> {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
           </div>
           <button onClick={logout} className="logout-btn">
             Logout

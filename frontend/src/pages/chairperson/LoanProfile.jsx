@@ -1,44 +1,47 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { isLoanOverdue, classifyLoanRisk } from "../../utils/finance";
 
 const LoanProfile = () => {
-  const { loanId } = useParams();
-  const navigate = useNavigate();
-  const { members, loans, loanRepayments } = useAuth();
+    const { loanId } = useParams();
+    const navigate = useNavigate();
+    const { members, loans, loanRepayments, penalties } = useAuth();
 
-  const loan = loans.find(l => l.id === loanId);
+    const loan = loans.find(l => l.id === loanId);
 
-  if (!loan) {
-    return <div>Loan not found.</div>;
-  }
+    if (!loan) {
+        return <div>Loan not found.</div>;
+    }
 
-  const member = members.find(m => m.id === loan.memberId);
+    const member = members.find(m => m.id === loan.memberId);
 
-  const repayments = loanRepayments
-  .filter(r => r.loanId === loanId)
-  .sort((a, b) => new Date(a.date) - new Date(b.date));
+    const repayments = loanRepayments
+        .filter(r => r.loanId === loanId)
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  const validTotal = repayments
-    .filter(r => r.status === "valid")
-    .reduce((sum, r) => sum + r.amount, 0);
+    const validTotal = repayments
+        .filter(r => r.status === "valid")
+        .reduce((sum, r) => sum + r.amount, 0);
 
-  const flaggedExists = repayments.some(r => r.flagged);
+    const flaggedExists = repayments.some(r => r.flagged);
 
-  const balance =
-    loan.expectedTotalPayment - validTotal;
+    const balance = loan.expectedTotalPayment - validTotal;
 
     let runningBalance = loan.expectedTotalPayment;
+    const overdue = isLoanOverdue(loan, balance);
 
-const repaymentsWithBalance = repayments.map(rep => {
-  if (rep.status === "valid") {
-    runningBalance -= rep.amount;
-  }
+    const riskLevel = classifyLoanRisk({ loan, balance, flaggedExists, penalties});
 
-  return {
-    ...rep,
-    balanceAfter: runningBalance
-  };
-});
+    const repaymentsWithBalance = repayments.map(rep => {
+        if (rep.status === "valid") {
+        runningBalance -= rep.amount;
+        }
+
+        return {
+            ...rep,
+            balanceAfter: runningBalance
+        };
+    });
 
   return (
     <div style={{ padding: "2rem" }}>
@@ -127,7 +130,19 @@ const repaymentsWithBalance = repayments.map(rep => {
             ))}
           </tbody>
         </table>
+        // Following section will appear only if a loan is overdue based on the current date and the loan's issued date + tenure
+        
       )}
+      {overdue && (
+            <p style={{ color: "red", fontWeight: "bold" }}> ⚠ Loan is OVERDUE </p> )}
+        <p> Risk Level:{" "}
+                <strong
+                    style={{
+                        color:
+                        riskLevel === "HIGH"? "red" : riskLevel === "MEDIUM"? "orange": riskLevel === "CLOSED"? "gray": "green"}}
+                 >
+                {riskLevel}</strong>
+        </p>
     </div>
   );
 };

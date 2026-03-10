@@ -5,30 +5,32 @@ import { calculateAvailableCash } from "../../utils/finance";
 
 const LoanApplicationForm = () => {
   const navigate = useNavigate();
-  const { setLoanApplications, user, members, loans, shares, loanRepayments } = useAuth();
+  const { setLoanApplications, user, members, loans, shares, loanRepayments, penalties } = useAuth();
 
   const [memberId, setMemberId] = useState("");
   const [requestedAmount, setRequestedAmount] = useState("");
   const [interestRate, setInterestRate] = useState("");
+  const [termMonths, setTermMonths] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const amount = Number(requestedAmount);
     const rate = Number(interestRate);
-    const availableCash = calculateAvailableCash(loanRepayments, loans, shares);
+    const months = Number(termMonths);
+    const availableCash = calculateAvailableCash(loanRepayments, loans, shares, penalties);
 
     if (amount > availableCash) {
       alert(`Requested amount exceeds available cash (K${availableCash}).`);
       return;
     }
-    if (!memberId || !amount || !rate) {
+    if (!memberId || !amount || !rate || !months) {
       alert("All fields are required.");
       return;
     }
 
-    if (amount <= 0 || rate < 0) {
-      alert("Enter valid loan amount and interest rate.");
+    if (amount <= 0 || rate < 0 || months <= 0) {
+      alert("Enter valid loan amount, interest rate, and term.");
       return;
     }
     // Check if member already has an active loan
@@ -46,6 +48,7 @@ const LoanApplicationForm = () => {
         memberId,
         requestedAmount: amount,
         interestRate: rate,
+        termMonths: months,
         requestedBy: user?.role || "treasurer",
         status: "pending",
         date: new Date().toISOString(),
@@ -58,59 +61,59 @@ const LoanApplicationForm = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Request Loan for Member</h2>
+        <div className="dashboard-container">
+            <div className="card shadow-sm" style={{ maxWidth: "600px" }}>
+              <div className="card-body">
+                <h4 className="mb-4">Loan Application</h4>
 
-      <form onSubmit={handleSubmit}>
-       <div>
-              <label>Select Member:</label>
-              <select value={memberId} onChange={(e) => setMemberId(e.target.value)}>
-                  <option value="">-- Select Member --</option>
-                      {members.map((member) => (
-                  <option key={member.id} value={member.id}>
-                      {member.fullName} ({member.id})
-                  </option>
-                  ))}
-              </select>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                      <label className="form-label">Select Member:</label>
+                      <select value={memberId} onChange={(e) => setMemberId(e.target.value)}>
+                          <option value="">-- Select Member --</option>
+                            {members.map((member) => (
+                          <option key={member.id} value={member.id} className="form-control">{member.fullName} ({member.id})</option>
+                            ))}
+                      </select>
+                    </div>
+                    <div className="mb-3">
+                      <label className="form-label">Loan Amount:</label>
+                      <input
+                        placeholder="Enter Requested Amount"
+                        className="form-control"
+                        type="number"
+                        value={requestedAmount}
+                        onChange={(e) => setRequestedAmount(e.target.value)}/>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="form-label">Interest Rate (e.g. 0.1 for 10%):</label>
+                      <input
+                        placeholder="Enter Interest Rate"
+                        className="form-control"
+                        type="number"
+                        step="0.1"
+                        value={interestRate}
+                        onChange={(e) => setInterestRate(e.target.value)}/>
+                    </div> 
+                    <div className="mb-3">
+                      <label className="form-label">Loan Term (Months):</label>
+                        <input
+                          placeholder="Enter Loan Term in Months"
+                          className="form-control"
+                          type="number"
+                          step="1"
+                          value={termMonths}
+                          onChange={(e) => setTermMonths(e.target.value)}/>
+                    </div>
+                    <button type="submit" className="btn btn-primary">
+                      Submit Application
+                    </button>
+                  </form>
+              </div>
+            </div>
         </div>
-       {/* <div>
-          <label>Member ID:</label>
-          <input
-            type="text"
-            value={memberId}
-            onChange={(e) => setMemberId(e.target.value)}
-          />
-        </div> */} 
 
-        <div>
-          <label>Loan Amount:</label>
-          <input
-            type="number"
-            value={requestedAmount}
-            onChange={(e) => setRequestedAmount(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label>Interest Rate (e.g. 0.1 for 10%):</label>
-          <input
-            type="number"
-            step="0.01"
-            value={interestRate}
-            onChange={(e) => setInterestRate(e.target.value)}
-          />
-        </div>   
-        <button type="submit" style={{ marginTop: "10px" }}>
-          Submit Application
-        </button>
-      </form>
-      <div>
-        { /*
-           const memberActiveLoan = loans.find( (loan) => loan.memberId === memberId && loan.status === "approved");
-           memberActiveLoan && <div style={{ color: "orange" }}>This member currently has an active loan.</div>
-        } */}
-      </div>
-    </div>
   );
 };
 

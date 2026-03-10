@@ -1,105 +1,129 @@
-import { members, shares, contributions } from "../../mock";
+import { shares, contributions } from "../../mock";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { calculateTotalGroupSavingsAndInterest, calculateAvailableCash, calculateTotalOutstandingExposure } from "../../utils/finance";
 import "bootstrap/dist/css/bootstrap.min.css"; 
+import "../../styles/dashboard.css";
 
 const TreasurerDashboard = () => {
     const navigate = useNavigate();
-    const { loans,logout, loanRepayments } = useAuth(); // custorm hook to get loans from context
+    const { loans,logout, loanRepayments, penalties, members } = useAuth(); // custorm hook to get loans from context
 
   // Totals
   const totalShareCapital = shares.reduce(
     (sum, share) => sum + share.amount,
     0
   );
-  const totalGroupSavingsAndInterest = calculateTotalGroupSavingsAndInterest(loans, shares);
+  const totalGroupSavingsAndInterest = calculateTotalGroupSavingsAndInterest(loans, shares, penalties );
 
   const totalContributions = contributions.reduce(
     (sum, c) => sum + c.amount,
     0
   );
 
-  const totalLoanExposure = calculateTotalOutstandingExposure(loans, loanRepayments);
+  const totalLoanExposure = calculateTotalOutstandingExposure(loans, loanRepayments, penalties);
 
   const totalMonthlyExpected = loans.reduce(
     (sum, loan) => sum + loan.monthlyInstallment,
     0
   );
 
-  const availableCash = calculateAvailableCash(loanRepayments, loans, shares);
+  const availableCash = calculateAvailableCash(loanRepayments, loans, shares, penalties);
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h1>Treasurer Dashboard</h1>
+        <div className="dashboard-container">
 
-      <section style={{ display: "flex", gap: "2rem", marginTop: "2rem" }}>
-        <div>
-          <h3>Group Savings & Interest</h3>
-          <p>K{totalGroupSavingsAndInterest}</p>
+          <h1 className="dashboard-title">Treasurer Dashboard</h1>
+
+          <div className="row g-3">
+
+            <div className="col-md-4 col-lg-2">
+              <div className="stats-card">
+                <i className="bi bi-piggy-bank stats-icon"></i>
+                <div className="stats-title">Group Savings & Interest</div>
+                <div className="stats-value">K{totalGroupSavingsAndInterest}</div>
+              </div>
+            </div>
+
+            <div className="col-md-4 col-lg-2">
+              <div className="stats-card">
+                <i className="bi bi-bar-chart-line stats-icon"></i>
+                <div className="stats-title">Share Capital</div>
+                <div className="stats-value">K{totalShareCapital}</div>
+              </div>
+            </div>
+
+            <div className="col-md-4 col-lg-2">
+              <div className="stats-card">
+                <i className="bi bi-wallet2 stats-icon"></i>
+                <div className="stats-title">Contributions</div>
+                <div className="stats-value">K{totalContributions}</div>
+              </div>
+            </div>
+
+            <div className="col-md-4 col-lg-2">
+              <div className="stats-card">
+                <i className="bi bi-cash stats-icon"></i>
+                <div className="stats-title">Available Cash</div>
+                <div className="stats-value">K{availableCash}</div>
+              </div>
+            </div>
+
+            <div className="col-md-4 col-lg-2">
+              <div className="stats-card">
+                <i className="bi bi-exclamation-diamond stats-icon"></i>
+                <div className="stats-title">Loan Exposure</div>
+                <div className="stats-value">K{totalLoanExposure}</div>
+              </div>
+            </div>
+
+            <div className="col-md-4 col-lg-2">
+              <div className="stats-card">
+                <i className="bi bi-graph-up stats-icon"></i>
+                <div className="stats-title">Monthly Inflow</div>
+                <div className="stats-value">K{totalMonthlyExpected.toFixed(2)}</div>
+            </div>
+            </div>
+          </div>
+
+          <h3 className="section-title">Loan Portfolio</h3>
+          <div className="card shadow-sm">
+            <div className="card-body">
+              <table className="table table-hover">
+                <thead className="table-light">
+                  <tr>
+                    <th>Member</th>
+                    <th>Principal</th>
+                    <th>Interest</th>
+                    <th>Total Payable</th>
+                    <th>Amount Paid</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {loans.map(loan => {
+                    const member = members.find(m => m.id === loan.memberId);
+
+                    return (
+                  <tr   key={loan.id}
+                        onClick={() => navigate(`/treasurer/loans/${loan.id}`)}
+                        style={{ cursor: "pointer" }}>
+                    <td>{member?.fullName}</td>
+                    <td>K{loan.principal}</td>
+                    <td>{loan.interestRate * 100}%</td>
+                    <td>K{loan.expectedTotalPayment}</td>
+                    <td>K{loan.amountPaid}</td>
+                    <td>{loan.status}</td>
+                 </tr>
+                  );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+           <button onClick={logout} style={{ marginTop: "2rem" }}>Logout</button>
+
         </div>
-        <div>
-          <h3>Total Share Capital</h3>
-          <p>K{totalShareCapital}</p>
-        </div>
-
-        <div>
-          <h3>Total Contributions</h3>
-          <p>K{totalContributions}</p>
-        </div>
-        <div>
-          <h3>Available Cash</h3>
-          <p>K{availableCash}</p>
-        </div>
-        <div>
-          <h3>Total Loan Exposure</h3>
-          <p>K{totalLoanExposure}</p>
-        </div>
-
-        <div>
-          <h3>Monthly Expected Inflow</h3>
-          <p>K{totalMonthlyExpected.toFixed(2)}</p>
-        </div>
-      </section>
-
-      <hr style={{ margin: "2rem 0" }} />
-
-      <h2>Loan Portfolio</h2>
-
-      <table border="1" cellPadding="8" style={{ width: "100%" }} className="table table-hover">
-        <thead className="table-light">
-          <tr>
-            <th>Member</th>
-            <th>Principal</th>
-            <th>Interest</th>
-            <th>Total Payable</th>
-            <th>Amount Paid</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loans.map(loan => {
-            const member = members.find(m => m.id === loan.memberId);
-
-            return (
-              <tr   key={loan.id}
-                    onClick={() => navigate(`/treasurer/loans/${loan.id}`)}
-                    style={{ cursor: "pointer" }}>
-                <td>{member?.fullName}</td>
-                <td>K{loan.principal}</td>
-                <td>{loan.interestRate * 100}%</td>
-                <td>K{loan.expectedTotalPayment}</td>
-                <td>K{loan.amountPaid}</td>
-                <td>{loan.status}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-         <button onClick={logout} style={{ marginTop: "2rem" }}>
-      Logout
-    </button>
-    </div>
   );
 };
 
