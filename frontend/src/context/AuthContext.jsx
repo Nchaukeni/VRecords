@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from "react";
-import { members, shares } from "../mock";
 
 const AuthContext = createContext();
 
@@ -11,6 +10,8 @@ export const AuthProvider = ({ children }) => {
     id: "m-001",
     fullName: "Alice Moyo",
     memberNumber: "VR-001",
+    email: "alice@example.com",
+    password: "password123",
     joinDate: "2023-01-15",
     status: "active", // active | inactive
     role: "chairperson", // member | treasurer | chairperson
@@ -20,6 +21,8 @@ export const AuthProvider = ({ children }) => {
     id: "m-002",
     fullName: "Brian Ndlovu",
     memberNumber: "VR-002",
+    email: "nchaukeni@example.com",
+    password: "password123",
     joinDate: "2023-03-10",
     status: "active",
     role: "treasurer"
@@ -29,11 +32,46 @@ export const AuthProvider = ({ children }) => {
     id: "m-003",
     fullName: "Chipo Dube",
     memberNumber: "VR-003",
+    email: "chipo@example.com",
+    password: "password123",
     joinDate: "2024-02-01",
     status: "inactive",
     role: "member"
   },
 ]);
+
+////////////////////////////////////
+const [shares, setShares] = useState([
+  {
+    id: "s-001",
+    memberId: "m-001",
+    amount: 300,
+    enteredBy: "treasurer",
+    purchaseDate: "2023-02-01",
+    cycleYear: 2026
+  },
+  {
+    id: "s-002",
+    memberId: "m-002",
+    amount: 300,
+    enteredBy: "treasurer",
+    purchaseDate: "2023-04-12",
+    cycleYear: 2026
+  },
+  {
+    id: "s-003",
+    memberId: "m-001",
+    amount: 300,
+    enteredBy: "treasurer",
+    purchaseDate: "2024-01-20",
+    cycleYear: 2026
+  },
+]); // Initialize shares state with mock data
+//////////////////////////////////// Cycle Configuration //////////////////////////
+const [cycleConfig, setCycleConfig] = useState({
+  sharePrice: 0,
+  cycleYear: 2026
+});
 
   // -------------------------
   // Loans (Only approved loans live here)
@@ -108,7 +146,10 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         members,
+        cycleConfig,
+        setCycleConfig,
         shares,
+        setShares,
         login,
         logout,
         loans,

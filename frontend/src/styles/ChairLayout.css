@@ -1,71 +1,120 @@
-.chair-layout {
+/* LAYOUT */
+.chair-layout-dark {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  background-color: #020d1f;
+  color: #e2e8f0;
 }
 
-.chair-sidebar {
-  width: 250px;
-  background-color: #1f2937;
-  color: white;
-  padding: 20px;
+/* SIDEBAR */
+.chair-sidebar-dark {
+  width: 240px;
+  background: #041a2f;
+  padding: 1.5rem;
+  border-right: 1px solid rgba(34, 211, 238, 0.1);
+  display: flex;
+  flex-direction: column;
 }
 
+/* TITLE */
 .chair-title {
-  margin-bottom: 30px;
+  color: #22d3ee;
+  font-weight: 700;
+  margin-bottom: 2rem;
 }
 
-nav {
+/* NAV */
+.nav-section {
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
-.nav-link {
+/* NAV LINKS */
+.nav-link-dark {
   text-decoration: none;
-  color: #cbd5e1;
-  padding: 10px 0;
-  transition: 0.2s ease;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #94a3b8;
+  transition: all 0.3s ease;
 }
 
-.nav-link:hover {
+/* HOVER */
+.nav-link-dark:hover {
+  background: rgba(34, 211, 238, 0.1);
+  color: #22d3ee;
+}
+
+/* ACTIVE LINK */
+.nav-link-dark.active {
+  background: linear-gradient(135deg, #22d3ee, #3b82f6);
   color: white;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
 }
 
-.nav-link.active {
-  color: #22c55e;
-  font-weight: bold;
-}
-
-.chair-content {
-  flex: 1;
-  padding: 30px;
-  background-color: #f9fafb;
-}
-
-.chair-main {
+/* MAIN AREA */
+.chair-main-dark {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.chair-header {
-  height: 60px;
-  background-color: white;
+/* HEADER */
+.chair-header-dark {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 1rem 1.5rem;
+  background: #041a2f;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.1);
 }
 
-.logout-btn {
-  background-color: #ef4444;
+/* USER TEXT */
+.user-label {
+  color: #94a3b8;
+}
+
+/* ROLE BADGE */
+.role-badge {
+  margin-left: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(34, 211, 238, 0.1);
+  color: #22d3ee;
+  font-size: 0.8rem;
+}
+
+/* CONTENT */
+.chair-content-dark {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+/* BUTTON */
+.btn-vrecords-danger {
+  background: linear-gradient(135deg, #ff4d4f, #ff7875);
   border: none;
-  padding: 8px 12px;
   color: white;
-  cursor: pointer;
-  border-radius: 4px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+/* LOGO CONTAINER */
+.sidebar-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
-.logout-btn:hover {
-  opacity: 0.9;
+/* LOGO IMAGE */
+.sidebar-logo img {
+  width: 140px;
+  max-width: 100%;
+  object-fit: contain;
+
+  /* subtle glow to match your theme */
+  filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.3));
 }

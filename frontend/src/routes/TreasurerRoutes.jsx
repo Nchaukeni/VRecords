@@ -7,6 +7,8 @@ import LoanApplicationForm from "../pages/treasurer/LoanApplicationForm";
 import LoanPortfolio from "../pages/treasurer/LoanPortfolio";
 import LoanProfile from "../pages/chairperson/LoanProfile";
 import LoanRepaymentForm from "../pages/treasurer/LoanRepayment";
+import BuyShares from "../pages/treasurer/BuyShares";
+import ShareSettings from "../pages/treasurer/ShareSettings";
 
 const TreasurerRoutes = () => {
   return (
@@ -16,6 +18,8 @@ const TreasurerRoutes = () => {
         <Route path="apply-loan" element={<LoanApplicationForm />} />
         <Route path="loan-portfolio" element={<LoanPortfolio />} />
         {<Route path="loans/:loanId" element={<LoanProfile/>} />}
+        <Route path="share-settings" element={<ShareSettings />} />
+        <Route path="buy-shares" element={<BuyShares />} />
       </Route>
     </Routes>
   );

@@ -9,6 +9,7 @@ const AddMember = () => {
 
   const [fullName, setFullName] = useState("");
   const [memberId, setMemberId] = useState("");
+  const [memberEmail, setMemberEmail] = useState("");
   const memberNumber = `VR-${String(members.length + 1).padStart(3, "0")}`;
   const [status, setStatus] = useState("active");
 
@@ -41,6 +42,8 @@ const AddMember = () => {
       id: memberId,
       fullName,
       memberNumber,
+      email: memberEmail,
+      password: "default",
       joinDate: new Date().toISOString(),
       status,
       role: "member"
@@ -75,6 +78,18 @@ const AddMember = () => {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Enter full name"
+              />
+
+            </div>
+             <div className="mb-3">
+              <label className="form-label">Email</label>
+
+              <input
+                type="email"
+                className="form-control"
+                value={memberEmail}
+                onChange={(e) => setMemberEmail(e.target.value)}
+                placeholder="Enter email"
               />
 
             </div>

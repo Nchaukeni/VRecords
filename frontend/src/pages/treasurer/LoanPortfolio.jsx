@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import "../../styles/LoanPortfolio.css"
 
 const LoanPortfolio = () => {
-  const { members, loans, setLoanRepayments, loanRepayments, penalties } = useAuth();
+  const {user, members, loans, setLoanRepayments, loanRepayments, penalties } = useAuth();
 
   const [selectedMember, setSelectedMember] = useState(null);
   const [amount, setAmount] = useState("");
@@ -34,7 +34,7 @@ const LoanPortfolio = () => {
 
   const handleSubmitRepayment = () => {
     if (!amount || Number(amount) <= 0) return;
-
+    const enteredBy = `${user?.fullName} (${user?.role})`;
     const newRepayment = {
       id: Date.now(),
       loanId: userLoan.id,
@@ -43,7 +43,7 @@ const LoanPortfolio = () => {
       status: "pending", // IMPORTANT: chair must approve
       flagged: false,
       date: new Date().toISOString(),
-      enteredBy: "treasurer",
+      enteredBy: enteredBy,
     };
    
     setLoanRepayments([...loanRepayments, newRepayment]);

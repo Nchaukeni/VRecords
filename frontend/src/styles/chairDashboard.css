@@ -1,0 +1,67 @@
+/* BACKGROUND */
+.dashboard-container-dark {
+  background-color: #020d1f;
+  min-height: 100vh;
+  padding: 2rem;
+  color: #e2e8f0;
+}
+
+/* TITLE */
+.dashboard-title-dark {
+  color: #22d3ee;
+  font-weight: 700;
+}
+
+/* SECTION TITLE */
+.section-title-dark {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: #94a3b8;
+}
+
+/* CARDS */
+.stats-card-dark {
+  background: #041a2f;
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(34, 211, 238, 0.1);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.05);
+  transition: 0.3s;
+}
+
+.stats-card-dark:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 25px rgba(34, 211, 238, 0.2);
+}
+
+/* TEXT */
+.stats-title {
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+.stats-value {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #22d3ee;
+}
+
+/* TABLE */
+.table-card-dark {
+  background: #041a2f;
+  border-radius: 12px;
+  border: 1px solid rgba(34, 211, 238, 0.1);
+}
+
+/* BUTTONS */
+.btn-vrecords-danger {
+  background: linear-gradient(135deg, #ff4d4f, #ff7875);
+  border: none;
+  color: white;
+  font-weight: 600;
+}
+
+.stats-card-dark:hover .stats-icon {
+  transform: scale(1.1);
+  transition: 0.3s ease;
+}

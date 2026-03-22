@@ -1,13 +1,13 @@
-import { shares, contributions } from "../../mock";
+import { contributions } from "../../mock";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { calculateTotalGroupSavingsAndInterest, calculateAvailableCash, calculateTotalOutstandingExposure } from "../../utils/finance";
 import "bootstrap/dist/css/bootstrap.min.css"; 
-import "../../styles/dashboard.css";
+import "../../styles/Dashboard.css";
 
 const TreasurerDashboard = () => {
     const navigate = useNavigate();
-    const { loans,logout, loanRepayments, penalties, members } = useAuth(); // custorm hook to get loans from context
+    const { loans,logout, loanRepayments, penalties, members, shares } = useAuth(); // custorm hook to get loans from context
 
   // Totals
   const totalShareCapital = shares.reduce(

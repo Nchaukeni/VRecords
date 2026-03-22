@@ -1,0 +1,43 @@
+/* LEFT SIDE BACKGROUND (match logo) */
+.vrecords-left {
+  background-color: #020d1f; /* deep navy */
+}
+
+/* LOGIN CARD */
+.login-card {
+  width: 340px;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+/* BUTTON MATCHING LOGO GRADIENT */
+.btn-vrecords {
+  background: linear-gradient(135deg, #22d3ee, #3b82f6);
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.btn-vrecords:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* INPUT POLISH */
+.form-control {
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.vrecords-left img {
+  filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.3));
+}
+
+.btn-vrecords:hover {
+  transform: scale(1.02);
+}

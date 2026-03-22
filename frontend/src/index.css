@@ -1,0 +1,71 @@
+/* INPUT DARK */
+.input-dark {
+  background: #041a2f;
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  color: #e2e8f0;
+}
+
+.input-dark::placeholder {
+  color: #94a3b8;
+}
+
+/* BUTTON PRIMARY (GRADIENT) */
+.btn-vrecords {
+  background: linear-gradient(135deg, #22d3ee, #3b82f6);
+  border: none;
+  color: white;
+  font-weight: 600;
+}
+
+.btn-vrecords:hover {
+  opacity: 0.9;
+}
+/* reuse from dashboard */
+.table-card-dark {
+  background: #041a2f;
+  border-radius: 12px;
+  border: 1px solid rgba(34, 211, 238, 0.1);
+}
+
+.section-title-dark {
+  color: #94a3b8;
+  margin-bottom: 1rem;
+}
+
+/* ICON STYLE FOR STATS CARDS */
+.stats-icon {
+  font-size: 1.8rem;
+  color: #22d3ee;
+  opacity: 0.9;
+
+  /* glow effect */
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.6);
+
+  /* spacing */
+  margin-bottom: 10px;
+}
+
+.icon-primary {
+  color: #22d3ee;
+  text-shadow: 0 0 10px rgba(34, 211, 238, 0.6);
+}
+
+.icon-success {
+  color: #4ade80;
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+}
+
+.icon-warning {
+  color: #facc15;
+  text-shadow: 0 0 10px rgba(250, 204, 21, 0.5);
+}
+
+.icon-danger {
+  color: #f87171;
+  text-shadow: 0 0 10px rgba(248, 113, 113, 0.5);
+}
+
+.stats-card-dark:hover .stats-icon {
+  transform: scale(1.1);
+  transition: 0.3s ease;
+}

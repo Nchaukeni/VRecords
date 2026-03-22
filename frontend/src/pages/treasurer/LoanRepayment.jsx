@@ -23,10 +23,8 @@ const LoanRepayment = () => {
   }
 
   const totalLoanAmount = calculateLoanTotal(loan);
-  const remainingBalance = calculateRemainingBalance(
-    loan,
-    loanRepayments
-  );
+  const remainingBalance = calculateRemainingBalance( loan, loanRepayments);
+
   /////////////////////////////////////////////////////////////////////////////////////////
   //              This is the 3rd version of handleSubmit that includes auto loan closure 
   //              and better state management

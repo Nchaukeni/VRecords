@@ -21,6 +21,24 @@ const TreasurerLayout = () => {
             Dashboard
           </NavLink>
 
+           <NavLink
+            to="/treasurer/buy-shares"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Shares Portal
+          </NavLink>
+
+          <NavLink
+            to="/treasurer/share-settings"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Share Configuarations
+          </NavLink>
+          
           <NavLink
             to="/treasurer/apply-loan"
             className={({ isActive }) =>
