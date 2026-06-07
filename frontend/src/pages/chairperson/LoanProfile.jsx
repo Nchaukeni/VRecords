@@ -56,7 +56,7 @@ const LoanProfile = () => {
       <div className="d-flex justify-content-between mb-4 no-print">
         <button
           onClick={() => navigate(-1)}
-          className="btn btn-outline-secondary"
+          className="btn btn-outline-info"
         >
           ← Back
         </button>
@@ -71,14 +71,14 @@ const LoanProfile = () => {
 
       {/* HEADER */}
       <div className="text-center mb-4">
-        <h1 className="fw-bold">Loan Profile</h1>
-        <p className="text-muted">
+        <h1 className="fw-bold text-info">Loan Profile</h1>
+        <p className="text-secondary">
           Member: {member?.fullName}
         </p>
       </div>
 
       {/* LOAN SUMMARY */}
-      <h2 className="mb-3">Loan Summary</h2>
+      <h2 className="mb-3 section-title-dark">Loan Summary</h2>
       <div className="card shadow-sm mb-4">
         <div className="card-body">
           <div className="row">
@@ -136,7 +136,7 @@ const LoanProfile = () => {
       </div>
 
       {/* REPAYMENT HISTORY */}
-      <h2 className="mb-3">Repayment History</h2>
+      <h2 className="mb-3 section-title-dark">Repayment History</h2>
 
       {repayments.length === 0 ? (
         <p>No repayments recorded.</p>
@@ -183,6 +183,8 @@ const LoanProfile = () => {
 };
 
 export default LoanProfile;
+
+
 /*
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";

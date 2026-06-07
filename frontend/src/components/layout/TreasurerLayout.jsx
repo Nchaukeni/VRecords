@@ -1,69 +1,66 @@
 import { NavLink, Outlet } from "react-router-dom";
 import "../../styles/TreasurerLayout.css";
 import { useAuth } from "../../context/AuthContext";
+import logo from "../../assets/VRecords Images/Print.svg";
 
 const TreasurerLayout = () => {
   const { user, logout } = useAuth();
   return (
     <div className="treasurer-layout">
       {/* Sidebar */}
-      <aside className="treasurer-sidebar">
-        <h2 className="treasurer-title">Treasurer Panel</h2>
+      <aside className="treasurer-sidebar no-print">
+         <div className="sidebar-logo">
+              <img src={logo} alt="VRecords Logo" />
+          </div>
 
-        <nav>
+        <nav className="nav-section">
           <NavLink
             to="/treasurer"
             end
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
+            className="nav-link-dark"
           >
             Dashboard
           </NavLink>
 
            <NavLink
             to="/treasurer/buy-shares"
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
+            className="nav-link-dark"
           >
             Shares Portal
           </NavLink>
 
           <NavLink
             to="/treasurer/share-settings"
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
+            className="nav-link-dark"
           >
             Share Configuarations
           </NavLink>
           
           <NavLink
             to="/treasurer/apply-loan"
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
+            className="nav-link-dark"
           >
             Apply Loan
           </NavLink>
 
           <NavLink
             to="/treasurer/loan-portfolio"
-            className={({ isActive }) =>
-              isActive ? "nav-link active" : "nav-link"
-            }
+            className="nav-link-dark"
           >
             Loan Portfolio
           </NavLink>
         </nav>
       </aside>
       <div className="treasurer-main">
-        <header className="treasurer-header">
+        <header className="treasurer-header-dark no-print">
           <div>
-            Logged in as: <strong>{user.fullName}</strong> {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+              <span className="user-label">Logged in as:</span>{" "}
+              <strong>{user.fullName}</strong>{" "}
+              <span className="role-badge">
+                {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
+              </span>
           </div>
-          <button onClick={logout} className="logout-btn">
+          <button onClick={logout} className=" btn-vrecords-danger">
             Logout
           </button>
         </header>

@@ -4,7 +4,25 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+
+
+  const [Vgroups, setVGroups] = useState([
+    {
+      id: "vg-001",
+      name: "Virtual Group 1",
+      vgStatus: "active", // active | inactive
+      description: "This is the first virtual group.",
+      createdDate: "2023-01-01",
+    },
+  ]);
   const [ members, setMembers] = useState([
+  {
+    id: "admin-001",
+    fullName: "Super User",
+    email: "nchaukenizulu@gmail.com",
+    password: "admin123",
+    role: "superuser",
+  },
   {
     vgroupId: "vg-001", // Virtual Group ID, for potential expansion to multiple groups, this will always match group ID of the chairperson
     id: "m-001",
@@ -144,6 +162,8 @@ const [cycleConfig, setCycleConfig] = useState({
   return (
     <AuthContext.Provider
       value={{
+        Vgroups,
+        setVGroups,
         user,
         members,
         cycleConfig,

@@ -72,3 +72,31 @@ body {
     border: 1px solid #ddd;
   }
 }
+
+
+.dashboard-card-dark {
+  background-color: #0f172a;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  transition: 0.2s ease;
+}
+
+.dashboard-card-dark:hover {
+  transform: translateY(-3px);
+}
+
+.table-card-dark {
+  background-color: #0f172a;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.section-title-dark {
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.clickable-row:hover {
+  background-color: rgba(56, 189, 248, 0.08) !important;
+}

@@ -1,3 +1,17 @@
+.dashboard-container-dark {
+  background-color: #020d1f;
+  min-height: 100vh;
+  padding: 2rem;
+  color: #e2e8f0;
+}
+
+/* TITLE */
+.dashboard-title-dark {
+  color: #22d3ee;
+  font-weight: 700;
+}
+
+
 /* INPUT DARK */
 .input-dark {
   background: #041a2f;
@@ -68,4 +82,152 @@
 .stats-card-dark:hover .stats-icon {
   transform: scale(1.1);
   transition: 0.3s ease;
+}
+/*.  Logout Button       */
+.btn-vrecords-danger {
+  background: linear-gradient(135deg, #ff4d4f, #ff7875);
+  border: none;
+  color: white;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+}
+
+.role-badge {
+  margin-left: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(34, 211, 238, 0.1);
+  color: #22d3ee;
+  font-size: 0.8rem;
+}
+/* user title*/
+.user-label {
+  color: #94a3b8;
+}
+/*///////////////////////////////////////The following styles apply to Nav links in both chair and treasurer layouts.///////////////////////////////////////*/
+/* NAV */
+.nav-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* NAV LINKS */
+.nav-link-dark {
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #94a3b8;
+  transition: all 0.3s ease;
+}
+
+/* HOVER */
+.nav-link-dark:hover {
+  background: rgba(34, 211, 238, 0.1);
+  color: #22d3ee;
+}
+
+/* ACTIVE LINK */
+.nav-link-dark.active {
+  background: linear-gradient(135deg, #22d3ee, #3b82f6);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.4);
+}
+
+
+
+.stats-card:hover {
+  transform: translateY(-3px);
+}
+
+
+.section-title {
+  margin-top: 40px;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.stats-card {
+  background: white;
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-direction: column;
+}
+
+.stats-icon {
+  font-size: 28px;
+  color: #0d6efd;
+}
+
+.stats-title {
+  font-size: 15px;
+  color: #6c757d;
+}
+.stats-description {
+  font-size: 13px;
+  color: #495057;
+}
+.stats-value {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Improve readability */
+body {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.dashboard-card-dark {
+  background-color: #0f172a;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  transition: 0.2s ease;
+}
+
+.dashboard-card-dark:hover {
+  transform: translateY(-3px);
+}
+
+.table-card-dark {
+  background-color: #0f172a;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.section-title-dark {
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.clickable-row:hover {
+  background-color: rgba(56, 189, 248, 0.08) !important;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #ddd;
+  }
+  .treasurer-main {
+    flex: 1 !important;
+    padding: 2rem !important;
+    display: flex;
+    flex-direction: column;
+  }
 }

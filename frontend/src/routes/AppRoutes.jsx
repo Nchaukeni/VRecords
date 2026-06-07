@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import Login from "../pages/auth/Login";
 import ChairRoutes from "./ChairRoutes";
 import TreasurerRoutes from "./TreasurerRoutes";
+import SuperUserRoutes from "./SuperUserRoutes";
 import { ROLES } from "../utils/roles";
 
 export default function AppRoutes() {
@@ -16,6 +17,12 @@ export default function AppRoutes() {
     );
   }
 
+  const roleMap = {
+    [ROLES.CHAIRPERSON]: "/chair",
+    [ROLES.TREASURER]: "/treasurer",
+    [ROLES.SUPERUSER]: "/superuser"
+  };
+
   return (
       <Routes>
 
@@ -23,10 +30,8 @@ export default function AppRoutes() {
         <Route
           path="/"
           element={
-            user.role === ROLES.CHAIRPERSON
-              ? <Navigate to="/chair" replace />
-              : <Navigate to="/treasurer" replace />
-          }
+            roleMap[user.role] ? <Navigate to={roleMap[user.role]} replace /> : null
+        }
         />
 
         {/* Chair routes */}
@@ -37,6 +42,11 @@ export default function AppRoutes() {
         {/* Treasurer routes */}
         {user.role === ROLES.TREASURER && (
           <Route path="/treasurer/*" element={<TreasurerRoutes />} />
+        )}
+
+        {/* SuperUser routes */}
+        {user.role === ROLES.SUPERUSER && (
+          <Route path="/superuser/*" element={<SuperUserRoutes />} />
         )}
 
         {/* Fallback */}
